@@ -1,6 +1,6 @@
 ---
 title: "Desktops"
-description: "Jobs run on Windows desktops with the Minicor Desktop Service installed."
+description: "Deploy on desktops, virtual machines, browsers, and Citrix. Jobs run wherever the target application lives."
 ---
 
 A desktop is a Windows machine that runs the application you are automating. Every job executes against a desktop, and everything the automation does happens there: the clicks, the keystrokes, the screen reads, the recording.
@@ -13,12 +13,23 @@ Minicor provisions cloud desktops for you, or you add a machine you control from
 
 ![A connected desktop in the dashboard: healthy, with a live screen view and RDP access one click away.](/images/desktops.png)
 
-## Where the desktop lives
+## Where automations run
 
-- **Cloud VM.** Minicor provisions a Windows VM with the Desktop Service installed. The fastest way to start.
-- **Your environment.** Install the Desktop Service on a machine you control: your cloud project, your VPC, or on premises next to the system being automated. This is the usual choice when the target system is locked down or the data cannot leave your boundary. See [Deploy on your cloud](/operations/network-boundary).
+Automations drive the target application through its interface, the pixels and controls on screen, so they run anywhere that interface appears.
 
-Either way, the target application signs in with your existing account for that system. No separate integration user is required.
+### Virtual machines
+
+Minicor provisions a Windows VM with the Desktop Service installed, the fastest way to start. Or install the Desktop Service on a machine you control: your cloud project, your VPC, or on premises next to the system being automated. That is the usual choice when the target system is locked down or the data cannot leave your boundary. See [Deploy on your cloud](/operations/network-boundary).
+
+### Browsers
+
+Web applications run in a managed browser session on the desktop. The automation handles single-page apps, dynamic content, popups, and authentication flows, and a single job can mix browser and desktop steps: read from a web portal, write into a desktop application, in one run.
+
+### Citrix and remote desktops
+
+Applications served through Citrix, RDP, or another virtual desktop environment automate the same way local ones do: the automation works the visual stream, so no Citrix-specific connectors are needed. Session disconnects, reconnects, and latency are handled as part of the run.
+
+Wherever it runs, the target application signs in with your existing account for that system. No separate integration user is required.
 
 ## Watching and intervening
 

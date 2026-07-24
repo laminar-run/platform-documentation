@@ -65,6 +65,7 @@
             "group": "Safety and operations",
             "pages": [
               "operations/verification",
+              "operations/human-in-the-loop",
               "operations/network-boundary",
               "operations/exceptions-and-telemetry",
               "operations/monitoring-and-reporting"

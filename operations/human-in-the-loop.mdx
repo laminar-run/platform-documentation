@@ -1,0 +1,40 @@
+---
+title: "Human in the loop"
+description: "Patterns for putting a person exactly where one belongs: on the write that matters, and nowhere else."
+---
+
+Most of a job should run without anyone watching. The point of human-in-the-loop is precision: a person on the one action that deserves judgment, automation on everything else. These are the patterns, from lightest to heaviest, and how to build each one.
+
+## Verify, gate, write
+
+The default. Before a critical action, a [verification step](/operations/verification) checks the screen against a plain-language expectation and a gate stops the run if it fails. No person involved unless something is wrong, and when something is wrong, nothing gets written.
+
+**Build it:** ask for it when you teach. "Verify we are on the right screen before submitting, and stop if we are not." The builder puts the verification and the gate in place.
+
+## Refuse instead of guessing
+
+When the input itself is the problem, the right behavior is a refusal the caller can act on, not a best guess. A job taught with refusal scenarios rejects bad input instantly and returns why.
+
+**Build it:** teach a sample with `expect: { "refusal": "why" }` in the [teach envelope](/api/teach). Duplicate records, missing fields, and unknown entities each become a scenario that refuses cleanly.
+
+## A person approves the write
+
+For high-stakes writes, regulatory requirements, or judgment calls, a [human review step](/operations/verification#human-review) pauses the run and notifies your Slack channel with the context and the state of the desktop. Approved runs continue; rejected runs stop safely.
+
+**Build it:** ask for it when you teach: "before saving, send this for review and wait for approval."
+
+## Your own review queue
+
+When approvals belong in your product rather than ours, run the loop yourself: call the job [asynchronously](/running/calling-your-job#asynchronous-for-long-work), follow progress with [status webhooks](/api/calling-jobs#status-webhooks) or polling, and surface the run to your reviewer with whatever context your product has. Their decision becomes the next API call.
+
+**Build it:** split the work into two jobs, one that reads and prepares, one that writes, and put your approval between them.
+
+## Take the desktop yourself
+
+Sometimes the loop is literal: a one-time dialog, a manual sign-in, a state only a person can untangle. Every desktop has a [live view](/running/desktops#watching-and-intervening) and you can take control from the browser mid-run.
+
+## Approving what agents do
+
+The [co-pilot](/teaching/co-pilot) and any agent on the [MCP](/agents/mcp) propose actions with consequences, teaching a job, going live, running a script, as approval cards. You approve or decline each one.
+
+> Start with verify-gate-write everywhere, add refusals for bad input, and reserve human approval for the writes where being wrong is expensive. A loop with a person in the wrong place is just a slow automation.

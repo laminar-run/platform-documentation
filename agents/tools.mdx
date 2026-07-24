@@ -23,7 +23,7 @@ The steps underneath a job and their runs.
 - Create, read, and edit the automation steps; run an automation whole or from a specific step.
 - List executions, read each step's input and output, and diagnose failures with automation-aware analysis.
 - Fetch replays: full recordings, single frames, zoomed regions, and clips around the moment of failure.
-- Analyze a replay with computer vision: `analyze_recording` maps a run into UI events with timestamps, change regions, click positions, and a step-to-video timeline, and `annotate_recording` renders any moment with that analysis drawn on the frame.
+- Analyze a replay with computer vision: `analyze_recording` maps a run into UI events with timestamps, change regions, click positions, and a step-to-video timeline. Clicks and keystrokes come from the desktop's recorded input telemetry when it is present, and are inferred from the video otherwise. `annotate_recording` renders any moment with the analysis drawn on the frame: event boxes, click markers, the cursor trail.
 
 ![A replay frame annotated by the MCP: the green box is the screen region the analysis saw change, the orange marker is the click it inferred from the video.](/images/replay-annotated.png)
 
