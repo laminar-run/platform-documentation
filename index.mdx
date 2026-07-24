@@ -7,7 +7,7 @@ description: "Minicor turns automations on legacy systems into API endpoints. Te
   Minicor is SOC 2 Type II certified and HIPAA compliant. Automations and their data can run entirely [on your own cloud](/operations/network-boundary).
 </Info>
 
-Minicor is an automation platform for the systems your product needs to read and write but that have low or no API coverage: EHRs, ERPs, dealership management systems, property management systems, insurance AMS platforms, and other legacy applications that only expose a user interface.
+Minicor is the interface between AI and legacy desktop applications: call them like any API. Minicor agentically builds self-healing automations on any no-API system, EHRs, ERPs, DMS, TMS, SCM, PMS, then hands you an API endpoint to call. No integration to build, nothing to maintain.
 
 The unit of automation is a **job**. A job is an endpoint that represents an automation. You teach it by sending real sample API calls. The builder works on the automation until every sample passes. Then you go live and call the same endpoint from your product, like any other API.
 
@@ -25,6 +25,17 @@ The unit of automation is a **job**. A job is an endpoint that represents an aut
 ## What runs underneath
 
 Each job is a sequence of automation steps that execute on a desktop through the Minicor Desktop Service. Steps drive the target application the way a person would: navigating screens, filling fields, reading results. Every run is recorded, so you can watch a [replay](/running/executions-and-replays) of exactly what happened on the desktop.
+
+## What the platform gives you
+
+| | |
+| --- | --- |
+| **Stay in control** | [Verification](/operations/verification) checks the screen before critical actions, human review steps gate the writes you choose, and agent actions require your approval. |
+| **End-to-end observability** | Audit logs and a video [replay](/running/executions-and-replays) of every step, for every run. |
+| **Plugs into your stack** | [Status webhooks](/api/calling-jobs#status-webhooks) and telemetry push events to your systems in real time. |
+| **Authentication that holds** | [2FA / OTP](/running/two-factor) handled inside the run, credentials vaulted in [configurations](/running/configurations), and authenticated sessions reused across runs. |
+| **Scale** | Run many jobs at once. Runs serialize per [desktop](/running/desktops) and scale out across desktops. |
+| **Host anywhere** | Our cloud, or [entirely on yours](/operations/network-boundary). |
 
 ## Where to start
 
