@@ -1,0 +1,17 @@
+---
+title: "2FA / OTP"
+description: "Virtual phones, emails, and authenticator secrets, so a login challenge never needs a person on call."
+---
+
+Many legacy systems challenge sign-ins with a code. Minicor handles this inside the run, without a person on call:
+
+| Capability | What it does |
+| --- | --- |
+| Virtual phone numbers | Receive SMS codes for logins that require text verification. |
+| Virtual email addresses | Receive email verification codes. |
+| Authenticator secrets | Store TOTP secrets and generate current codes on demand. |
+| QR registration | Register an authenticator directly from the QR code the target application displays. |
+
+Provision a phone number, email address, or secret once for the workspace under **2FA / OTP** in the dashboard. When a run hits a challenge, the automation requests the current code from the platform and enters it, the same way it fills any other field.
+
+> Secrets are provisioned once and referenced by ID. The values never appear in the automation, the samples, or the replays.

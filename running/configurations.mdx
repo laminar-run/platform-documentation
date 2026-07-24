@@ -11,17 +11,6 @@ Create a configuration in the dashboard under **Configurations**, add your prope
 
 Configurations also select the environment. A job pointed at a staging configuration runs against your staging system; swap the configuration and the same job runs against production.
 
-## Two-factor authentication
+For login challenges that need a code, see [2FA / OTP](/running/two-factor).
 
-Many legacy systems challenge sign-ins with a code. Minicor handles this inside the run, without a person on call:
-
-| Capability | What it does |
-| --- | --- |
-| Virtual phone numbers | Receive SMS codes for logins that require text verification. |
-| Virtual email addresses | Receive email verification codes. |
-| Authenticator secrets | Store TOTP secrets and generate current codes on demand. |
-| QR registration | Register an authenticator directly from the QR code the target application displays. |
-
-Provision a phone number, email address, or secret once for the workspace. When a run hits a challenge, the automation requests the current code from the platform and enters it, the same way it fills any other field.
-
-> Secrets are provisioned once and referenced by ID. The values never appear in the automation, the samples, or the replays.
+> Change a value in one place and every run after picks it up. Credentials never live in the automation itself.
