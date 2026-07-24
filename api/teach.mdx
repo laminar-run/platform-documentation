@@ -1,0 +1,48 @@
+---
+title: "The teach envelope"
+description: "Add minicor.teach to any call and it becomes a lesson instead of a live run."
+---
+
+Teaching happens over the same endpoint as live traffic. A call whose body contains the `minicor` envelope with `teach: true` is a teaching call: it creates or updates a sample, and it never touches live traffic.
+
+## Shape
+
+```json
+{
+  "customerName": "Bobs Tires",
+  "amount": 1250.00,
+  "dueDate": "2026-08-15",
+  "minicor": {
+    "teach": true,
+    "prompt": "Create an invoice in the billing system for this customer. If the customer already has an open invoice for the same amount, refuse and say why.",
+    "scenario": "Rejects duplicate invoice",
+    "artifacts": [
+      { "type": "url", "url": "https://example.com/sops/invoicing.pdf" },
+      { "type": "text", "text": "The billing system rejects due dates in the past." }
+    ]
+  }
+}
+```
+
+Everything outside `minicor` is the sample input, exactly as your product would send it on a live call.
+
+## Fields
+
+| Field | Required | What it does |
+| --- | --- | --- |
+| `teach` | Yes | Marks the call as a teaching call. |
+| `prompt` | Yes | What the job should do with this input, in plain language. On later samples, use it to describe the expected outcome for this specific case. |
+| `scenario` | No | Names the scenario this sample belongs to. Without it, the platform buckets the sample automatically. Manual grouping always wins. |
+| `expect` | No | The expected outcome for this sample: fields the response should contain, or `{ "refusal": "why" }` when the correct behavior is to refuse. |
+| `artifacts` | No | Context for the builder: SOP documents, transcripts, walkthrough videos, or plain notes. Each entry carries a `type` and a matching `url` or `text` field, plus an optional `description`. |
+
+## What a teach call does
+
+1. The first teach call to an unknown method and path **creates the job** in the Learning state and starts the builder.
+2. Every teach call **records a sample**: the input, the intent, and the checks derived from it.
+3. The **builder runs** until this sample and every existing sample pass.
+4. If the job is already Live, the work happens on a new version and production traffic is untouched until you go live again.
+
+The response acknowledges the lesson and points at the build, which you can follow on the job page or poll at `GET /_builds/:id`.
+
+> Send the payload your product actually produces, not a cleaned-up version. The sample is the contract for live calls, and the job is only as honest as its inputs.

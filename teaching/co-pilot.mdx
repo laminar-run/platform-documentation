@@ -1,0 +1,26 @@
+---
+title: "Co-pilot"
+description: "A chat rail inside the dashboard that teaches jobs, adds scenarios, and answers questions about your workspace."
+---
+
+The co-pilot is a chat rail on the right side of the dashboard. Open it with the **Co-pilot** button in the top bar or with **Cmd+J**. It knows what page you are on, so on a job page you can just ask about that job.
+
+![The co-pilot checking a desktop: it connects, takes a screenshot, and reports what it sees.](/images/co-pilot.png)
+
+## What you can do with it
+
+- **Teach a job.** Describe what the job should do and paste one real example input. The co-pilot creates the job and starts the builder.
+- **Add samples and scenarios.** Tell it the edge case in plain language and it turns that into a sample with the right checks.
+- **Diagnose failures.** Ask why a scenario is failing and it reads the run, looks at what happened on the desktop, and tells you what it found.
+- **Check readiness.** Ask what is blocking go-live and it walks the stability breakdown for you.
+- **Operate the workspace.** Ask about executions, desktops, configurations, or anything else you would otherwise click through to find.
+
+## Approvals
+
+Anything with consequences comes back to you as an approval card before it happens: teaching the job with a new sample, updating the job, going live, running a script on a desktop. The co-pilot proposes, you approve.
+
+> "Promote /create-invoice to live?" Real traffic will run this version. **Approve** / **Not yet**
+
+## The same tools your agents get
+
+The co-pilot is not a separate system. It operates the platform through the Minicor MCP, the same tool surface you can point your own coding agent at. If you would rather work from your IDE or wire Minicor into your own agent stack, see [Connect an agent](/agents/mcp).

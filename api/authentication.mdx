@@ -1,0 +1,28 @@
+---
+title: "Authentication"
+description: "One API key in the x-api-key header, for live calls, teaching, and the reserved paths."
+---
+
+All requests to a trigger URL authenticate with an API key in the `x-api-key` header:
+
+```bash
+curl -X POST "https://<your-trigger-url>/create-invoice" \
+  -H "x-api-key: $MINICOR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "customerName": "Bobs Tires" }'
+```
+
+The same key covers live calls, teaching calls, and the reserved introspection paths (`/_jobs`, `/_executions/:id`, `/_builds/:id`). The OpenAPI document at `/swagger.json` is the one path that does not require it.
+
+## Getting the key
+
+The key lives with the trigger URL. Open a job and click **Call this job**: the dialog shows the trigger URL and the API key together, ready to copy. Every job behind the same trigger host shares the key.
+
+Keys you create under **Settings** are workspace API keys for the Minicor platform itself (the dashboard, the MCP, and platform APIs). They are not the trigger key.
+
+## Handling the key
+
+- Pass the key from a secret store or environment variable at request time. Never commit one.
+- If the key is exposed, contact the Minicor team to replace it.
+
+A missing or invalid key returns `401` with no further detail.

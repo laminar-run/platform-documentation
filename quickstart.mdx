@@ -1,47 +1,70 @@
 ---
 title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+description: "Teach your first job: connect a desktop, send one real example, watch the builder work, and go live."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+A job is an endpoint that represents an automation. This guide takes you from an empty workspace to a live job you can call from your product.
 
 ## Prerequisites
 
-Before you begin, you must have:
-
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+- A Minicor workspace. Sign in at [app.minicor.com](https://app.minicor.com), the Minicor dashboard.
+- The target application you want to automate, running on a desktop you can connect.
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Connect a desktop">
+    Jobs run on a Windows machine with the Minicor Desktop Service installed. You can use a cloud desktop provisioned through Minicor or a machine in your own environment. Once the desktop is connected, it appears in your workspace with a live preview.
 
-    ```bash
-    npm install your-package
-    ```
+    See [Desktops](/running/desktops) for the details.
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+  <Step title="Teach the job with one real example">
+    Describe what the job should do and give it one real input. The first call to a new endpoint with a teach envelope creates the job and starts the builder.
+
+    Your trigger URL and its API key are on the Jobs page; the empty state hands you a ready-to-run curl. See [Authentication](/api/authentication) for where keys live.
 
     ```bash
-    your-cli init
+    curl -X POST "https://<your-trigger-url>/create-invoice" \
+      -H "x-api-key: $MINICOR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "customerName": "Bobs Tires",
+        "amount": 1250.00,
+        "dueDate": "2026-08-15",
+        "minicor": {
+          "teach": true,
+          "prompt": "Create an invoice in the billing system for this customer."
+        }
+      }'
     ```
+
+    You can do the same thing without curl: click **Create a job** in the dashboard and fill in the description and example input, or ask the [co-pilot](/teaching/co-pilot) to teach it for you.
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
+  <Step title="Watch the builder work">
+    The job appears in your workspace in the **Learning** state. A job is always either **Learning** (the builder and your samples are shaping it) or **Live** (real traffic runs through it). The builder explores the target application on your desktop, constructs the automation steps, and runs your sample until it passes. You can watch its progress on the job page, including a live view of the desktop. If it needs information it cannot discover on its own, it asks you a question.
+
+    See [The builder](/teaching/the-builder).
+  </Step>
+  <Step title="Add more samples">
+    Send more real inputs the same way, with the teach envelope. Samples that exercise different behavior are bucketed into separate [scenarios](/teaching/samples-and-scenarios): the happy path, the duplicate customer, the missing field. Each scenario makes the job more reliable, and the job's [stability score](/teaching/stability) reflects that.
+  </Step>
+  <Step title="Go live">
+    When your samples pass and the stability score looks right, click **Promote to live**. See [Going live](/teaching/going-live).
+  </Step>
+  <Step title="Call it from your product">
+    Same URL, no teach envelope. The job runs the automation on your desktop and returns structured JSON.
 
     ```bash
-    your-cli start
+    curl -X POST "https://<your-trigger-url>/create-invoice" \
+      -H "x-api-key: $MINICOR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "customerName": "Bobs Tires",
+        "amount": 1250.00,
+        "dueDate": "2026-08-15"
+      }'
     ```
+
+    See [Calling your job](/running/calling-your-job) for sync and async patterns.
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
-
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+> Every run is recorded. If anything looks off, open the execution and watch the [replay](/running/executions-and-replays) of what happened on the desktop.

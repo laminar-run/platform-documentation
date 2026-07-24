@@ -1,0 +1,60 @@
+---
+title: "Samples and scenarios"
+description: "Teaching a job means sending it real sample API calls. The platform buckets them into scenarios, one for each behavior the job needs to handle."
+---
+
+You do not configure a job. You teach it, and teaching means sending real examples.
+
+## Samples
+
+A sample is one real API input, sent to the job's endpoint with a teach envelope:
+
+```json
+{
+  "customerName": "Bobs Tires",
+  "amount": 1250.00,
+  "minicor": {
+    "teach": true,
+    "prompt": "Create an invoice in the billing system for this customer."
+  }
+}
+```
+
+Each sample becomes part of the job's definition of correct. The builder is not done until every sample passes. You can send samples from curl, create them in the dashboard, ask the [co-pilot](/teaching/co-pilot), or use the [MCP](/agents/mcp) from your own agent.
+
+A sample carries three things:
+
+| Part | What it is |
+| --- | --- |
+| Input | The real JSON payload, exactly as your product would send it. |
+| Intent | What should happen, in plain language. |
+| Checks | What the response must look like for the sample to pass. |
+
+Checks come in two forms. **Expression checks** assert on the response directly, like a status code or a field value. **Judged checks** describe the expected outcome in plain language and the platform grades the response against it. Judged checks are useful when the exact shape of a correct response varies.
+
+## Scenarios
+
+As samples run, the platform groups them into **scenarios**. Samples that exercise the same path through the job land in the same scenario, and the scenario gets named for the behavior it covers: "Creates a standard invoice", "Rejects duplicate customer", "Handles missing due date".
+
+The grouping is based on what actually happened during the run, not on how similar the inputs look. Two inputs that read very differently but drive the job down the same path belong to the same scenario. An input that triggers a new path creates a new scenario.
+
+You can also group samples yourself. Name a scenario when you teach, or add samples to a scenario from the job page. Samples in a scenario you created yourself are never regrouped automatically.
+
+![A live job with its scenarios on the right, each holding the samples that taught it. Three pass; a failing sample is open for review.](/images/job-page.png)
+
+## Why scenarios matter
+
+Scenarios are the job's coverage map. The job page shows how many scenarios are passing at a glance, and the [stability score](/teaching/stability) counts your samples toward readiness. When you wonder whether a job is ready for production, the question is concrete: which behaviors have scenarios, and are they all green?
+
+> Teaching is defining what correct means up front, except the definition is real API calls from your product. Edge cases you teach today are failures you never see in production.
+
+## Adding edge cases
+
+The fastest way to harden a job is to teach the inputs you are worried about:
+
+- The record that already exists.
+- The field that is sometimes missing.
+- The value the target system rejects.
+- The request that should be refused entirely.
+
+Send each one as a sample with the expected outcome, and the builder works until the job handles them all. This is the core of [self-healing on Minicor](/teaching/self-healing): enough scenarios, and the job stops breaking.

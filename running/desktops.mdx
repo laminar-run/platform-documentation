@@ -1,0 +1,31 @@
+---
+title: "Desktops"
+description: "Jobs run on Windows desktops with the Minicor Desktop Service installed."
+---
+
+A desktop is a Windows machine that runs the application you are automating. Every job executes against a desktop, and everything the automation does happens there: the clicks, the keystrokes, the screen reads, the recording.
+
+## The Minicor Desktop Service
+
+Each desktop runs the Minicor Desktop Service, the service that connects the machine to the platform. It executes automation steps, captures screenshots and replays, and manages browser sessions for web applications.
+
+Minicor provisions cloud desktops for you, or you add a machine you control from the dashboard and run the install command it gives you. Once the Desktop Service is running, the desktop appears in your workspace with a live preview, ready for jobs.
+
+![A connected desktop in the dashboard: healthy, with a live screen view and RDP access one click away.](/images/desktops.png)
+
+## Where the desktop lives
+
+- **Cloud VM.** Minicor provisions a Windows VM with the Desktop Service installed. The fastest way to start.
+- **Your environment.** Install the Desktop Service on a machine you control: your cloud project, your VPC, or on premises next to the system being automated. This is the usual choice when the target system is locked down or the data cannot leave your boundary. See [Your network boundary](/operations/network-boundary).
+
+Either way, the target application signs in with your existing account for that system. No separate integration user is required.
+
+## Watching and intervening
+
+The dashboard shows a live view of each connected desktop. The same view appears on the job page while the builder works and while runs execute, so you always see what the automation sees.
+
+When you need to act on the desktop yourself (dismiss a one-time dialog, complete a manual sign-in), you can take control from the browser. For extended work on the machine, connect over RDP as usual.
+
+## Scaling out
+
+One desktop is enough to build and go live. When volume grows, add more desktops and Minicor distributes work across them. Jobs that must not overlap on the same application serialize automatically, so two runs never fight over one screen.

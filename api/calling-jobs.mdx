@@ -1,0 +1,100 @@
+---
+title: "Calling jobs"
+description: "The full HTTP contract for a job's trigger URL."
+---
+
+Every live job is an HTTP endpoint at its trigger URL, shown on the job page. All requests carry your API key in the `x-api-key` header.
+
+## Request
+
+```bash
+curl -X POST "https://<your-trigger-url>/create-invoice" \
+  -H "x-api-key: $MINICOR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "customerName": "Bobs Tires", "amount": 1250.00 }'
+```
+
+Jobs can be registered on any HTTP method. The job's input is the merge of query parameters and the JSON body; if a key appears in both, the body wins. Request metadata (method, path, path parameters, headers) is available to the job under `_http`, so a job can read a path parameter or a header when it was taught to.
+
+## Synchronous response
+
+By default the connection holds until the run finishes. The body is the job's output as structured JSON.
+
+| Status | Meaning |
+| --- | --- |
+| `200` | The run succeeded. |
+| `207` | The run partially succeeded. The body reports per-step outcomes. |
+| `401` | Missing or invalid `x-api-key`. |
+| `404` | No job matches the method and path. |
+| `502` | The run failed. The body carries the error. |
+
+## Asynchronous execution
+
+Add `?async=1` to the URL, or send the header `x-job-async: true`. The call returns `202` immediately:
+
+```json
+{
+  "jobExecutionId": "8f2c41d6-93b4-4a1e-9d0e-5b7a2c6f13aa",
+  "status": "queued",
+  "resultPath": "/m/acme/_executions/8f2c41d6-93b4-4a1e-9d0e-5b7a2c6f13aa"
+}
+```
+
+`resultPath` is relative to the host; appended to it, it resolves to the `/_executions/:id` path under your trigger URL. Poll it with the same API key:
+
+```bash
+curl "https://<your-trigger-url>/_executions/8f2c41d6-93b4-4a1e-9d0e-5b7a2c6f13aa" \
+  -H "x-api-key: $MINICOR_API_KEY"
+```
+
+The response reports the execution's status (`running`, then a terminal state) and, once done, the job's output, the same body a synchronous call would have returned.
+
+## Status webhooks
+
+Polling tells you where a run stands when you ask. Webhooks tell you the moment it changes. Add a `callback_url` query parameter when you execute an automation and Minicor POSTs a JSON event to that URL as the run progresses:
+
+| Event | When it fires |
+| --- | --- |
+| `execution_started` | The run has started. |
+| `step_started` | A step has begun. |
+| `step_completed` | A step finished successfully. |
+| `step_failed` | A step failed. |
+| `execution_completed` | The run reached a terminal state. |
+
+Step events carry the step's name, its position in the run (`executionOrder` of `totalSteps`), its status, and its result. The completion event carries the final status, the result, and a link to the replay.
+
+```json
+{
+  "eventType": "step_completed",
+  "executionId": 48291,
+  "timestamp": "2026-07-24T17:31:04Z",
+  "step": {
+    "flowName": "Create invoice in billing system",
+    "executionOrder": 3,
+    "totalSteps": 5,
+    "status": "SUCCESS"
+  }
+}
+```
+
+Deliveries are fire-and-forget: a failed delivery is retried once and never blocks or slows the run. The callback URL must be publicly reachable over HTTP or HTTPS.
+
+Webhooks fire per automation execution. For a job called at its trigger URL, follow progress by polling the execution's result path, which moves from `queued` to `running` to a terminal status with `done: true`.
+
+## Reserved paths
+
+A few paths on your trigger host are reserved for introspection:
+
+| Path | Returns |
+| --- | --- |
+| `GET /swagger.json` | An OpenAPI document describing the jobs on this trigger host. No key required. |
+| `GET /_jobs` | The list of jobs and their endpoints. |
+| `GET /_executions/:id` | The status and result of one execution. |
+| `GET /_builds/:id` | The status of a build, including any open question. |
+| `POST /_builds/:id/answers` | Answer a builder question. |
+
+Everything except the OpenAPI document requires the API key.
+
+## Teaching over the same endpoint
+
+A call whose body includes the `minicor.teach` envelope is a teaching call, not a live run. See [The teach envelope](/api/teach).

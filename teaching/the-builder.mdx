@@ -1,0 +1,35 @@
+---
+title: "The builder"
+description: "The builder constructs the automation and refines it until every sample passes."
+---
+
+When you teach a job, the builder takes over. It connects to your desktop, explores the target application, constructs the automation steps, and runs your samples against them. It keeps working until every sample passes.
+
+## Watching it work
+
+The job page shows builder activity as it happens: what the builder is doing, which samples it is running, and how each one turned out. A live view of the desktop sits alongside, so you can watch the automation drive the application in real time.
+
+A build run moves through a small set of states:
+
+| State | Meaning |
+| --- | --- |
+| Queued | The build is waiting to start. |
+| Building | The builder is working on the draft. |
+| Needs your answer | The builder has a question for you. |
+| Passed | Every sample passes. |
+| Failed | The builder could not make the samples pass and stopped. |
+| Stopped | You stopped the build. |
+
+## Answering questions
+
+Some things the builder cannot discover on its own: which environment to use, what a company-specific field means, how to resolve an ambiguous instruction. When it hits one of these, the build pauses in **Needs your answer** and the question appears on the job page. Answer it and the build continues. Attaching context when you teach (an SOP document, a call transcript, plain notes) reduces how often this happens.
+
+A **Failed** build is not a dead end either. Answer any open question, add context or another sample that clarifies the behavior, and teach again.
+
+## Stopping and re-teaching
+
+You can stop a build at any time from the job page. Stopping is cooperative: the current operation finishes, then the build halts.
+
+Teaching is never one-shot. Send a new sample to a **Learning** job and the builder folds it in. Teach a job that is already **Live** and the builder works on a new version without touching production traffic. See [Going live](/teaching/going-live).
+
+> The builder edits the job's automation, not your live traffic. Nothing you teach affects production until you click **Promote to live**.

@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+
+/* Match the Minicor app: JetBrains Mono for everything code-shaped. */
+code,
+pre,
+kbd,
+samp,
+pre * {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* The app uses tight 6px radii on cards and 4px on controls. Mintlify
+   defaults are much rounder; pull the common surfaces in line. */
+#content-area .card,
+#content-area img,
+#content-area video,
+#content-area .rounded-2xl,
+#content-area .rounded-xl {
+  border-radius: 0.375rem;
+}
+
+#content-area .rounded-lg,
+#content-area .rounded-md,
+#content-area code {
+  border-radius: 0.25rem;
+}

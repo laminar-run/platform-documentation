@@ -1,0 +1,29 @@
+---
+title: "Exceptions and telemetry"
+description: "How failures are categorized, where they surface, and how they reach your systems."
+---
+
+Automations against legacy systems fail for reasons that have nothing in common: a UI change, bad input, the target system being down. Operating at scale means categorizing failures so each kind routes to the right fix, instead of being triaged by hand every time.
+
+## The four categories
+
+| Category | What happened | Resolution |
+| --- | --- | --- |
+| Automation failure | The job did not do what it should: a missed click, a wrong field, an element that moved. | Watch the replay, teach the failing case, go live with the fix. |
+| Bad input | The caller sent data the target system rejects: a missing field, an invalid format, a date rule violation. | Route back to the caller. This is an upstream fix. |
+| System instability | The target system is down, hanging, or in maintenance. A person could not complete the task either. | Retry later. Excluded from the job's stability signal. |
+| External dependency | A prerequisite owned by someone else is missing: a document not uploaded, an approval not given. | Hold and notify whoever owns the prerequisite. |
+
+Tracking bad input over time is worth the effort on its own. A validation error that fires many times a day is a signal to add validation upstream in your product; one that fires monthly is not worth the engineering.
+
+## Where failures surface
+
+**Callbacks.** The primary machine channel. When a run fails, your failure endpoint receives structured error information, including the category, so your system can update statuses, open tickets, or trigger its own flows automatically.
+
+**Slack.** Executions post to a dedicated telemetry channel: job name, status, and a link to the replay. Failures are flagged with what likely went wrong. Most production triage happens directly from this channel, without opening the dashboard.
+
+**Your observability stack.** Failures can flow into your existing tooling through an OpenTelemetry pipeline or a notification endpoint you define. Execution artifacts and logs can be written to a storage bucket you choose, including one inside [your own boundary](/operations/network-boundary).
+
+Callbacks, Slack channels, and export destinations are wired up with your Minicor team when you move to production.
+
+> The failure loop is teach-shaped on purpose. An automation failure becomes a sample, the sample becomes a scenario, and the same failure does not come back. See [Self-healing](/teaching/self-healing).

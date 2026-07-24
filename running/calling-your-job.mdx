@@ -1,0 +1,51 @@
+---
+title: "Calling your job"
+description: "One HTTP call to the trigger URL. JSON in, structured JSON out, sync or async."
+---
+
+Every job has a trigger URL, shown at the top of its job page next to its API key. Calling it is ordinary HTTP: the key in the `x-api-key` header, JSON in the body, structured JSON back.
+
+```bash
+curl -X POST "https://<your-trigger-url>/create-invoice" \
+  -H "x-api-key: $MINICOR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customerName": "Bobs Tires",
+    "amount": 1250.00,
+    "dueDate": "2026-08-15"
+  }'
+```
+
+## Synchronous by default
+
+By default the call holds until the job finishes and returns the job's output as the response body. The status code tells you how the run went:
+
+| Status | Meaning |
+| --- | --- |
+| 200 | The job succeeded. |
+| 207 | The job partially succeeded; some steps completed, some did not. The body says which. |
+| 502 | The job failed. The body carries the error. |
+
+Synchronous calls fit jobs that finish in seconds to a couple of minutes. Desktop automations are slower than a database query; set your client timeout accordingly.
+
+## Asynchronous for long work
+
+For long-running jobs, ask for an execution instead of holding the connection. Add `?async=1` to the URL (or send the `x-job-async: true` header) and the call returns `202` immediately:
+
+```json
+{
+  "jobExecutionId": "8f2c41d6-93b4-4a1e-9d0e-5b7a2c6f13aa",
+  "status": "queued",
+  "resultPath": "/m/acme/_executions/8f2c41d6-93b4-4a1e-9d0e-5b7a2c6f13aa"
+}
+```
+
+Poll the result path on the same host with the same API key until the execution reports done, then read the output from the response.
+
+The poll is also how you follow a run in progress: the status moves from `queued` to `running` to a terminal state, with `done: true` and the output once it finishes. If you would rather be told than ask, [status webhooks](/api/calling-jobs#status-webhooks) push events to your endpoint as the run progresses.
+
+## Inputs
+
+Query parameters and the JSON body merge into a single input object for the job. What you send is what you taught: the samples you used in teaching are the contract for what a live call should look like.
+
+The full request and response contract, including reserved paths and the per-job OpenAPI document, is in the [API reference](/api/calling-jobs).

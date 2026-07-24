@@ -1,0 +1,27 @@
+---
+title: "Configurations"
+description: "Key-value settings resolved into a job at run time. Credentials live here, not in the automation."
+---
+
+A configuration is a set of key-value pairs attached to a job and resolved at run time: the automation reads a key and gets the current value. Credentials for the target system are the most common use, which keeps them out of the automation itself and out of its history.
+
+## Using configurations
+
+Create a configuration in the dashboard under **Configurations**, add your properties, and attach it to the job. The job page shows which configuration a job uses. Change a value and the next run picks it up; nothing needs to be rebuilt or retaught.
+
+Configurations also select the environment. A job pointed at a staging configuration runs against your staging system; swap the configuration and the same job runs against production.
+
+## Two-factor authentication
+
+Many legacy systems challenge sign-ins with a code. Minicor handles this inside the run, without a person on call:
+
+| Capability | What it does |
+| --- | --- |
+| Virtual phone numbers | Receive SMS codes for logins that require text verification. |
+| Virtual email addresses | Receive email verification codes. |
+| Authenticator secrets | Store TOTP secrets and generate current codes on demand. |
+| QR registration | Register an authenticator directly from the QR code the target application displays. |
+
+Provision a phone number, email address, or secret once for the workspace. When a run hits a challenge, the automation requests the current code from the platform and enters it, the same way it fills any other field.
+
+> Secrets are provisioned once and referenced by ID. The values never appear in the automation, the samples, or the replays.

@@ -1,0 +1,45 @@
+---
+title: "Stability"
+description: "Every job has a stability score from 0 to 100 that tells you how proven it is."
+---
+
+Every job carries a stability score from 0 to 100 and a readiness tier. Together they answer one question: how proven is this job right now?
+
+The score appears next to the job's name on the job page. Click it for the full breakdown.
+
+![The stability breakdown on a live job: coverage, sample runs, and live traffic, all at full marks.](/images/stability-popover.png)
+
+## How the score is computed
+
+The score is the sum of three components.
+
+| Component | Up to | What it measures |
+| --- | --- | --- |
+| Coverage | 30 points | How many samples the job has. Full marks at 5 enabled samples. |
+| Sample runs | 35 points | The pass rate of the most recent sample run. No runs yet means 0. |
+| Live traffic | 35 points | The success rate of the last 50 live calls. Discounted until there are at least 10, so a small streak does not read as proven. |
+
+A job with 5 samples, a fully green latest run, and 50 successful live calls scores 100. A freshly taught job with one passing sample sits much lower, which is the honest answer.
+
+## Readiness tiers
+
+The tier is the plain-language version of the score.
+
+| Tier | What it means |
+| --- | --- |
+| Unproven | The job has never had a passing build, or has no samples. There is no evidence yet. |
+| Stabilizing | The job has been built and has samples, but has not cleared the bar below. |
+| Ready | Score of 70 or higher, the latest sample run is fully green, and there are at least 3 samples. |
+| Proven | Ready, plus at least 20 successful live calls. The job has held up under real traffic. |
+
+## What stability does and does not do
+
+Stability informs, it never blocks. You can take an unproven job live; the **Promote to live** dialog will tell you the score and suggest adding scenarios first, and then it will do what you asked.
+
+The score moves for exactly the reasons you would want it to:
+
+- Teaching more samples raises coverage.
+- A green run of all samples raises the sample component; a red one lowers it.
+- Successful live traffic accumulates toward proven; failures pull the live component down.
+
+> If you want a higher score, do not chase the number. Teach the edge cases you are worried about and run the samples. The score follows the evidence.

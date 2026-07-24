@@ -1,0 +1,37 @@
+---
+title: "Going live"
+description: "A job is Learning or Live. Go live switches the trigger URL to the taught version immediately."
+---
+
+A job is in one of two states: **Learning** or **Live**. Learning means the builder and your samples are shaping it. Live means real traffic runs through it.
+
+## Go live
+
+When your scenarios pass and the [stability score](/teaching/stability) looks right, click **Promote to live** on the job page. Live traffic at the trigger URL switches to the taught version immediately. There is no separate release step and nothing to configure.
+
+If the job's stability is low, the dialog says so: the tier, the score, and a suggestion to add scenarios and get every sample passing first. It is a warning, not a gate. You decide.
+
+## Calling a live job
+
+The same URL you taught against serves production. The only difference is the payload: no teach envelope.
+
+```bash
+curl -X POST "https://<your-trigger-url>/create-invoice" \
+  -H "x-api-key: $MINICOR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customerName": "Bobs Tires",
+    "amount": 1250.00,
+    "dueDate": "2026-08-15"
+  }'
+```
+
+See [Calling your job](/running/calling-your-job) for the full request contract.
+
+## Teaching a job that is already live
+
+Live jobs keep learning. Send a new sample with the teach envelope and the builder works on a new version while production traffic continues on the current one, untouched. As soon as a live job has taught changes waiting, it shows **Live · new lesson ready**. Review the new version, run the samples, then click **Promote to live** again to switch traffic over.
+
+![A live job with a new lesson ready: the working version has changed steps waiting to be promoted, and production traffic is untouched.](/images/build-view.png)
+
+> Production is never where you teach. Everything you teach runs against the job's working version; live traffic only changes when you say so.

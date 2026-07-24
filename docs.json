@@ -1,37 +1,106 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mintlify Starter Kit",
+  "name": "Minicor",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#646ECB",
+    "light": "#8A92E3",
+    "dark": "#4A54B8"
   },
   "favicon": "/favicon.svg",
+  "fonts": {
+    "heading": {
+      "family": "Geist"
+    },
+    "body": {
+      "family": "Geist"
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#f7f7f9",
+      "dark": "#090a15"
+    }
+  },
+  "appearance": {
+    "default": "light"
+  },
   "navigation": {
-    "pages": [
+    "tabs": [
       {
-        "group": "Getting Started",
-        "pages": [
-          "index",
-          "quickstart"
+        "tab": "Documentation",
+        "icon": "book-open",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "index",
+              "quickstart",
+              "how-it-runs"
+            ]
+          },
+          {
+            "group": "Teaching jobs",
+            "pages": [
+              "teaching/samples-and-scenarios",
+              "teaching/the-builder",
+              "teaching/stability",
+              "teaching/going-live",
+              "teaching/co-pilot",
+              "teaching/self-healing",
+              "teaching/drilling-down"
+            ]
+          },
+          {
+            "group": "Running jobs",
+            "pages": [
+              "running/calling-your-job",
+              "running/executions-and-replays",
+              "running/desktops",
+              "running/configurations"
+            ]
+          },
+          {
+            "group": "Safety and operations",
+            "pages": [
+              "operations/verification",
+              "operations/network-boundary",
+              "operations/exceptions-and-telemetry",
+              "operations/monitoring-and-reporting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "For agents",
+        "icon": "robot",
+        "groups": [
+          {
+            "group": "Connect an agent",
+            "pages": [
+              "agents/mcp",
+              "agents/job-build-loop",
+              "agents/sessions",
+              "agents/tools"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "icon": "square-terminal",
+        "groups": [
+          {
+            "group": "API reference",
+            "pages": [
+              "api/calling-jobs",
+              "api/teach",
+              "api/authentication"
+            ]
+          }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light.svg",
@@ -40,14 +109,14 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "minicor.com",
+        "href": "https://minicor.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://app.mintlify.com"
+      "label": "Sign in",
+      "href": "https://app.minicor.com"
     }
   },
   "contextual": {
@@ -64,9 +133,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "website": "https://minicor.com"
     }
   }
 }

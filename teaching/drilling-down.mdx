@@ -1,0 +1,26 @@
+---
+title: "Drilling down"
+description: "When you want to see exactly where a job failed and edit the automation yourself, open the Build view."
+---
+
+Most fixes go through teaching: send the failing case as a sample and let the builder handle it. But sometimes you want your hands on the automation itself. You saw the replay, you know exactly which step misbehaved, and you would rather edit it than describe it.
+
+The **Build** view is the tool for that. Treat it as the advanced path; for day-to-day work, teaching is faster and keeps the scenarios as the source of truth.
+
+## From a failing sample to the step
+
+1. On the job page, select the failing sample. The job's steps light up according to what happened in its latest run, so you can see exactly where it went wrong.
+2. Click **Fix in Build**. This drops you into the Build view scoped to the failing step's automation.
+3. The left side shows the automation's steps. The right side shows the desktop and the output of each run, with the evidence from the failing job run already loaded.
+
+![The Build view: the automation's steps and run selection on the left, the live desktop on the right.](/images/build-pipeline.png)
+
+## Working in the Build view
+
+- Edit a step's code directly, then run just that step, a range of steps, or the whole automation against a live desktop.
+- Seed the run with the input from the failing job run, so you are reproducing the real failure rather than a synthetic one.
+- Watch the desktop live as steps execute, the same view the builder uses.
+
+When the step behaves, save your changes and re-run the job's samples from the job page to confirm every scenario still passes.
+
+> Whatever you change by hand, prove it with the samples afterward. A manual fix that passes the scenarios is a fix; one that skips them is a guess.

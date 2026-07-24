@@ -1,0 +1,60 @@
+---
+title: "The Minicor MCP"
+description: "Connect any coding agent to Minicor. Everything the dashboard does, your agent can do through MCP."
+---
+
+Minicor exposes a Model Context Protocol server. Point Cursor, Claude Code, or any MCP-capable agent at it and the agent can teach jobs, run samples, inspect failures, drive desktops, and take jobs live, the same surface the dashboard and the co-pilot use.
+
+## Install
+
+<Tabs>
+  <Tab title="Cursor">
+    Add the server to `~/.cursor/mcp.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "minicor": {
+          "command": "npx",
+          "args": ["-y", "@minicor/mcp-server"]
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Claude Code">
+    ```bash
+    claude mcp add minicor -- npx -y @minicor/mcp-server
+    ```
+  </Tab>
+  <Tab title="Hosted (HTTP)">
+    Use the hosted server if you cannot run a local process:
+
+    ```text
+    https://mcp.minicor.com/mcp
+    ```
+
+    Authentication is OAuth; your client prompts you to sign in with your Minicor account. The hosted tool set matches the local server except for the tools that read and write your local disk (workspace clones, sessions, sync); those need the local install.
+  </Tab>
+</Tabs>
+
+The first local run opens a browser to sign in. Tokens are stored locally and refresh automatically.
+
+## What the surface covers
+
+| Area | What an agent can do |
+| --- | --- |
+| Jobs | Teach with samples, group scenarios, run samples, read run reports, inspect failures, go live. |
+| Automations | Create and edit the steps underneath a job, run them against a desktop. |
+| Executions | List runs, read step outputs, fetch replays and screenshots, diagnose failures. |
+| Desktops | Connect, screenshot, inspect UI elements, execute scripts, control runs. |
+| Configurations | Create and update key-value configurations, including two-factor channels and secrets. |
+| Workspace | Issues for shared context, skills for reusable automation patterns, agents on watch. |
+
+## Where to go next
+
+- [The job build loop](/agents/job-build-loop) is the canonical way an agent should work on a job. Read it first. The zero-to-live path is short: connect, pick a workspace, make sure a desktop is attached, teach samples, run them until green, go live.
+- [Sessions](/agents/sessions) covers long-running work and handoffs between agents.
+- [Tools](/agents/tools) is the one-page overview of the tool families.
+
+> These docs are written to be read by agents as much as by people. If you are an agent connected to the MCP: samples define done. Start every job task by making sure the job has samples that encode what correct means.

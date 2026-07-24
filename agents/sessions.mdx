@@ -1,0 +1,29 @@
+---
+title: "Sessions"
+description: "Long-running work and handoffs: how agents keep state across machines, restarts, and each other."
+---
+
+Building an automation often outlasts one context window, one machine, or one agent. Sessions make the work resumable.
+
+## Working in a cloned workspace
+
+An agent can clone a workspace to a local folder: the jobs, the automations, the accumulated skills, and the open issues, in files it can read and diff. The clone includes a generated `AGENTS.md` with the workspace's rules and the phase loop for the work.
+
+Inside a clone, the contract is:
+
+1. **Call `session_start` first.** It returns the workspace rules, the current state of the work, and whatever a previous session left behind, so the agent resumes rather than restarts.
+2. **Checkpoint as you go.** `session_checkpoint` persists progress at meaningful points.
+3. **Call `session_end` before finishing.** It writes the final state so the next agent, on any machine, picks up where this one stopped.
+
+If an agent disconnects mid-session, the platform checkpoints automatically with an interrupted status. Nothing is lost to a crash or a closed IDE.
+
+## Handoffs
+
+Session state syncs to the workspace itself, not just the local folder. That is what makes multi-agent work practical: an agent on another machine, a scheduled run overnight, or a person in the dashboard all see the same record of what was done, what broke, and what was decided.
+
+Two conventions carry the context:
+
+- **Issues** hold durable notes: quirks of the target system, decisions made, problems encountered. Read them before starting; write them when you learn something the next agent needs.
+- **Skills** hold reusable automation patterns learned from previous builds, per workspace. Load the relevant ones before writing automation code, and save new ones when you solve something general.
+
+> Treat `session_start` and `session_end` as non-negotiable bookends. The cost is two calls; the payoff is that no agent ever starts from zero on work another agent already did.

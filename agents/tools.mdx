@@ -1,0 +1,51 @@
+---
+title: "Tools"
+description: "The MCP tool families in one page."
+---
+
+The Minicor MCP groups its tools by what they operate on. This page is the map; each tool's own description carries its full schema.
+
+## Jobs
+
+The endpoint, its samples, and its lifecycle.
+
+- `teach_job`, `add_test_case`, `update_test_case`: teach with real inputs, manage samples and their checks, group scenarios.
+- `register_job`, `update_job`, `get_job`, `delete_job`: the job's step graph, edited with `variant: "draft"`.
+- `run_job`, `run_tests`, `get_test_report`: run the job or all of its samples, read the results per scenario.
+- `list_job_executions`, `get_job_execution`, `inspect_job_execution`: run history and failure drill-down.
+- `resolve_job_state`: where the job stands and the concrete next calls.
+- `publish_job`, `get_build_status`, `answer_build_question`, `cancel_build`: go live, follow the builder, answer its questions.
+
+## Automations and executions
+
+The steps underneath a job and their runs.
+
+- Create, read, and edit the automation steps; run an automation whole or from a specific step.
+- List executions, read each step's input and output, and diagnose failures with automation-aware analysis.
+- Fetch replays: full recordings, single frames, zoomed regions, and clips around the moment of failure.
+- Analyze a replay with computer vision: `analyze_recording` maps a run into UI events with timestamps, change regions, click positions, and a step-to-video timeline, and `annotate_recording` renders any moment with that analysis drawn on the frame.
+
+![A replay frame annotated by the MCP: the green box is the screen region the analysis saw change, the orange marker is the click it inferred from the video.](/images/replay-annotated.png)
+
+An agent debugging a failure does not have to watch the video: it asks for the analysis, jumps to the event that matters, and reads the annotated frame.
+
+## Desktops
+
+- `vm_connect`, `vm_status`, `vm_screenshot`, `vm_screenshot_region`: attach to a desktop and see it.
+- `vm_execute_script`, `vm_inspect_ui`, `vm_read_clipboard`, `vm_execution_control`: act on it, inspect the UI element tree, control a running script.
+- Deployment helpers install and start the Minicor Desktop Service on a new machine.
+
+## Configurations and two-factor
+
+- Configurations: create them, read and update the properties resolved into runs.
+- Two-factor: provision virtual phone numbers and email addresses, register TOTP secrets (including from a QR code), generate current codes, and resolve challenges mid-run.
+
+## Workspace
+
+- Workspaces: list, inspect, create.
+- Issues: durable context shared between agents and people.
+- Skills: reusable automation patterns, loaded before building and saved after learning something general.
+- Agents: create and manage on-demand, scheduled, or monitoring agents.
+- Sessions and sync: clone a workspace locally, `session_start` / `session_checkpoint` / `session_end`, push and pull changes. See [Sessions](/agents/sessions).
+
+> When in doubt, start with `resolve_job_state` for job work and `get_workspace_context` for everything else. Both return the situation and the next calls, which beats guessing from tool names.

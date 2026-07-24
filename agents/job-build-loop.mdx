@@ -1,0 +1,40 @@
+---
+title: "The job build loop"
+description: "The canonical way an agent works on a job: samples define done, then build until they pass."
+---
+
+This is the loop every agent should run when building or fixing a job. It is the same loop the platform's own builder follows. There are two ways to get the steps written: hand the work to the builder with `teach_job`, or author the step graph yourself with `register_job` and `update_job`. Either way, this loop is how the work is verified.
+
+## The loop
+
+<Steps>
+  <Step title="Define done first">
+    Before touching the job, make sure it has samples that encode what correct means. Use `teach_job` with a real input and a plain-language intent, or `add_test_case` with an input and checks. Group related samples into scenarios. A job with no samples has no definition of correct, and nothing you build against it can be verified.
+  </Step>
+  <Step title="Build the draft">
+    Create or update the job's step graph with `register_job` or `update_job` with `variant: "draft"`. Steps call whole automations or run code blocks. Data flows through `ctx`: each step can save its output under a key, and later steps reference it.
+  </Step>
+  <Step title="Run the gate">
+    `run_tests` with `variant: "draft"` runs every sample. Green means go live. Red means step 4. Never declare a job working without a green run of its samples.
+  </Step>
+  <Step title="Locate the failure">
+    `resolve_job_state` tells you where the job stands and what to do next. `get_test_report` shows which scenarios failed, and `inspect_job_execution` drills a failing sample down to the failing step and its run underneath.
+  </Step>
+  <Step title="Fix at the right level">
+    If the problem is in the job's wiring (step order, data passing, checks), update the draft and re-run just the failing slice: `run_job` from a step, seeded with the failed execution so earlier steps' values resolve without re-running them. If the problem is inside an automation step, fix the step's code, then return to step 3. Fixes are proven by samples, not by eyeballing a single run.
+  </Step>
+  <Step title="Go live">
+    When the draft's samples are green, `publish_job` takes it live. Traffic at the trigger URL switches immediately.
+  </Step>
+</Steps>
+
+## Rules that keep the loop honest
+
+- **Samples define done.** If the user describes new behavior, teach it as a sample before building it.
+- **Never edit live directly.** All work happens on the draft; live changes only through going live.
+- **Pass `variant: "draft"` explicitly.** `update_job`, `run_job`, and `run_tests` default to the live variant. Teach and build work always targets the draft.
+- **Reproduce with the seed.** When re-running a failing slice, seed from the failed execution so you are debugging the real state, not a fresh one.
+- **Stops are cooperative.** There is no pause. Stopping a run lets the current operation finish; plan around that for long automations.
+- **When lost, ask the platform.** `resolve_job_state` returns the concrete next calls for exactly this loop.
+
+> The mistake agents make is skipping step 1: building first and never defining done. Run the steps in order; every later step leans on the samples to say what correct is.

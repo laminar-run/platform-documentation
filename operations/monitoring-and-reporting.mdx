@@ -1,0 +1,26 @@
+---
+title: "Monitoring and reporting"
+description: "What operating live jobs looks like: agents watching traffic, and reports you can hand to your own customers."
+---
+
+Going live is the start of the operating loop, not the end of the project. Live jobs are watched continuously, and the platform is built so most of that watching is not done by a person.
+
+## The operating loop
+
+1. Executions post to [telemetry](/operations/exceptions-and-telemetry) with their status and replay link.
+2. Failures are categorized, so bad input routes to the caller and automation failures route to a fix.
+3. Fixes arrive by teaching: the failing case becomes a sample, the builder makes it pass, you go live. The [stability score](/teaching/stability) reflects the job's live record the whole time.
+
+## Agents on watch
+
+You can set an agent to watch a live automation. It watches runs, investigates failures by reading the run and the replay, and can trigger teach mode with the failing case, so the fix is often waiting for your review before you have read the alert. Agents run on demand, on a schedule, or as monitors, and their runs are recorded and reviewable like any other execution.
+
+The dashboard aggregates the same signal for people: stability at a glance, readiness across the workspace, and which jobs need attention.
+
+![The workspace dashboard: executions, success rate, jobs live, and the execution history over the last week.](/images/dashboard.png)
+
+## Reporting
+
+Minicor produces periodic usage and error reports per job: total runs, retries, failures with their categories, and trends over time. The reports are written to be handed downstream. When one of your own customers is the source of malformed input, the report documents it concretely, which turns a recurring support argument into a data point.
+
+> Use replays to see what happened, categories to decide whose fix it is, and reports when you need a paper trail.

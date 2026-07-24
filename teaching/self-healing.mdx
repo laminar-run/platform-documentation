@@ -1,0 +1,31 @@
+---
+title: "Self-healing"
+description: "Self-healing on Minicor is accumulation: every sample you teach makes the job better, until it stops breaking."
+---
+
+People usually ask about self-healing expecting runtime magic: an agent that improvises its way past whatever the screen throws at it, on every request. Minicor can heal jobs automatically, and does. But the healing runs through teaching, not through improvising in production, and that difference is the reason jobs hold up.
+
+## Healing by accumulation
+
+Every sample you teach becomes a scenario the job must keep passing. The job that has seen the duplicate customer, the expired session, the missing field, and the vendor's quirky validation dialog does not break on them, because handling those cases is part of what the builder verified.
+
+So the automation gets more reliable the longer it runs. Not because it improvises better, but because coverage only grows: more scenarios, fewer surprise failures.
+
+## When something new happens
+
+New failure modes still appear: a vendor ships a UI change, a system behaves differently at month-end. When that happens:
+
+1. The failure surfaces in [telemetry](/operations/exceptions-and-telemetry) with a replay of exactly what happened on the desktop.
+2. You, the co-pilot, or an agent in teach mode sends the failing input back to the job as a new sample.
+3. The builder updates the automation until the new sample passes, alongside every existing scenario.
+4. You review and go live. The failure is now a scenario, and it never surprises you again.
+
+This loop can run without you. An agent on watch catches the failure and triggers teach mode with the failing case, so the fix is often ready before you have looked at the alert. See [Monitoring and reporting](/operations/monitoring-and-reporting).
+
+> After you teach the failing case, that failure mode is covered. You should not see the same break twice.
+
+## What we recommend
+
+Let agents catch failures and teach the fixes automatically, and keep the go-live as your review point for jobs that write into systems of record. You get the speed of hands-off healing with a human decision on what reaches production.
+
+The reason healing goes through teaching rather than runtime improvisation: deterministic steps are fast, auditable, and repeatable, which is what you want when writing into a system of record. Minicor spends the intelligence at teach time, where a wrong guess costs a failed sample instead of a bad write against production data. What runs in production is code that your scenarios have already proven.

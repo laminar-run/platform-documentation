@@ -1,0 +1,33 @@
+---
+title: "Verification"
+description: "Screenshot checks, gates, and human review keep an automation from writing to the wrong place."
+---
+
+Legacy UIs are unpredictable. A pop-up, a session timeout, or an unexpected navigation state can leave an automation on the wrong screen, and writing data into the wrong record is the one failure that is hard to unwind. Verification steps exist so that never happens silently.
+
+## Screenshot verification
+
+Before a critical action, the automation captures a screenshot of the desktop and checks it against a plain-language expectation: "Is this the order entry form for customer 12345?" The check runs against the actual pixels on screen, so it catches exactly the failures that break blind automations: the wrong patient chart, the stale session, the dialog covering the form.
+
+<video controls muted playsInline className="w-full rounded-xl" src="/videos/replay-verified-lookup.mp4"></video>
+
+A verified lookup in a legacy dealership system: the automation opens the customer record, and a verification step confirms it is the right customer before anything downstream reads or writes.
+
+## Gates
+
+A gate reads the verification result and decides what happens next.
+
+| Result | Action |
+| --- | --- |
+| Pass | The run continues to the next step. |
+| Fail | The run stops safely before the write, resets state, and reports the failure. |
+
+The pair is the standard safety pattern: verify, then gate, then write. Ask for it when you teach ("verify we are on the right screen before submitting, and stop if we are not") and the builder puts both steps in place.
+
+## Human review
+
+Some writes deserve a person. A human review step pauses the run and sends a notification to your Slack channel with the context and the current state of the desktop. A reviewer approves or rejects; approved runs continue, rejected runs stop safely.
+
+Use human review for high-stakes writes, regulatory requirements, or judgment calls, and screenshot verification for everything routine. They compose: an automated check on every screen, a person on the one that matters.
+
+> Verification failures are not errors, they are saves. Each one is a bad write that did not happen, and each is worth teaching back as a scenario so the run handles that state on its own next time.
