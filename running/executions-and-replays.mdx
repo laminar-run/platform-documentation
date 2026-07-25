@@ -34,21 +34,21 @@ Here is a live run that pulls a report out of a dealership management system and
 
 <video controls muted playsInline className="w-full rounded-xl" src="/videos/replay-export-report.mp4"></video>
 
-The run has three steps. Watch it once, then walk through the key moments:
+The run has three steps. Watch it once, then walk through the key moments. The frames carry the same layers as the video, drawn at the instant each event fired:
 
-<Frame caption="Step 1, Navigate to Reports. The automation opens the Reports screen and clears whatever the last session left behind. The report pane on the right is empty and waiting.">
-  <img src="/images/replay-export-1-reports.png" alt="The Reports screen with an empty report pane reading Select a report from the left panel." />
+<Frame caption="Step 1, Navigate to Reports. The green box is the screen change the analysis detected: the work area transitioning to the Reports screen, report pane empty and waiting.">
+  <img src="/images/replay-export-1-reports.png" alt="The Reports screen with an empty report pane, a green box marking the detected screen transition." />
 </Frame>
 
-<Frame caption="Step 2, Run the report. The automation clicks Run Report on Deal Pipeline and the report starts generating, progress bar and all.">
-  <img src="/images/replay-export-2-report-run.png" alt="The Deal Pipeline report generating, with a progress bar and the message Generating report, please wait." />
+<Frame caption="Step 2, Run the report. The orange ring is the click the analysis inferred from the cursor's path, and the green box is the region redrawing as the Deal Pipeline report generates.">
+  <img src="/images/replay-export-2-report-run.png" alt="The Deal Pipeline report generating with a progress bar, a green change-region box, and an orange inferred-click marker." />
 </Frame>
 
-<Frame caption="Still step 2. The automation clicks Export to CSV at the bottom of the report pane. The confirmation dialog shows exactly where the file landed on the desktop's disk.">
-  <img src="/images/replay-export-3-export-dialog.png" alt="An Export complete dialog showing the CSV file path on disk." />
+<Frame caption="Still step 2. The automation clicked Export to CSV and the confirmation dialog shows exactly where the file landed on the desktop's disk. The box marks the next change the analysis caught: the dialog being dismissed.">
+  <img src="/images/replay-export-3-export-dialog.png" alt="An Export complete dialog showing the CSV file path on disk, inside a green change-region box." />
 </Frame>
 
-<Frame caption="Step 3, Read the file. The automation dismisses the dialog, reads the exported CSV from disk, and returns the rows as structured JSON in the job's response.">
+<Frame caption="Step 3, Read the file. The dialog is gone; the automation reads the exported CSV from disk and returns the rows as structured JSON in the job's response.">
   <img src="/images/replay-export-4-done.png" alt="The report screen after the export, with the status bar reading Report complete, 6 records." />
 </Frame>
 
