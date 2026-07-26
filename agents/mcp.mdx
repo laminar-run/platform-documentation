@@ -5,7 +5,45 @@ description: "Connect any coding agent to Minicor. Everything the dashboard does
 
 Minicor exposes a Model Context Protocol server. Point Cursor, Claude Code, or any MCP-capable agent at it and the agent can teach jobs, run samples, inspect failures, drive desktops, and take jobs live, the same surface the dashboard and the co-pilot use.
 
-## Install
+## Hosted server (recommended)
+
+The easiest way to connect: no install, no local process. The server runs at
+
+```text
+https://mcp.minicor.com/mcp
+```
+
+<Tabs>
+  <Tab title="Cursor">
+    Add a URL entry to `~/.cursor/mcp.json`; Cursor prompts for the sign-in on first use:
+
+    ```json
+    {
+      "mcpServers": {
+        "minicor": {
+          "url": "https://mcp.minicor.com/mcp"
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Claude Code">
+    ```bash
+    claude mcp add --transport http minicor https://mcp.minicor.com/mcp
+    ```
+
+    Then run `/mcp` inside Claude Code to trigger the sign-in.
+  </Tab>
+  <Tab title="Claude (web and desktop)">
+    Go to **Settings > Connectors > Add custom connector**, paste `https://mcp.minicor.com/mcp`, and save. OAuth is auto-discovered; no client ID or secret.
+  </Tab>
+</Tabs>
+
+Authentication is an OAuth flow: your client opens the Minicor sign-in page, you enter your email, password, and region (US or Canada), and the connection acts as your account. No API keys, no local tokens. Access tokens expire within an hour and refresh automatically for up to 30 days; after that you sign in again.
+
+The hosted tool set matches the local server except for the tools that read and write your local disk (workspace clones, sessions, sync). If you need those, install locally.
+
+## Local install
 
 <Tabs>
   <Tab title="Cursor">
@@ -27,18 +65,15 @@ Minicor exposes a Model Context Protocol server. Point Cursor, Claude Code, or a
     claude mcp add minicor -- npx -y @minicor/mcp-server
     ```
   </Tab>
-  <Tab title="Hosted (HTTP)">
-    Use the hosted server if you cannot run a local process:
-
-    ```text
-    https://mcp.minicor.com/mcp
-    ```
-
-    Authentication is OAuth; your client prompts you to sign in with your Minicor account. The hosted tool set matches the local server except for the tools that read and write your local disk (workspace clones, sessions, sync); those need the local install.
-  </Tab>
 </Tabs>
 
-The first local run opens a browser to sign in. Tokens are stored locally and refresh automatically.
+Then authenticate:
+
+```bash
+npx -y -p @minicor/mcp-server minicor-mcp-setup
+```
+
+This opens a browser to sign in with your Minicor account. Tokens are stored at `~/.minicor/tokens.json` and refresh automatically. On a headless machine or over SSH, add `--cli` to sign in from the terminal.
 
 ## What the surface covers
 

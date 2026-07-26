@@ -1,0 +1,34 @@
+---
+title: "The Minicor Desktop Service"
+description: "The service that connects a Windows machine to the platform and executes every automation step."
+---
+
+The Minicor Desktop Service (MDS) is what turns a Windows machine into a [desktop](/running/desktops) the platform can use. It executes automation steps, captures screenshots and replays, records input telemetry for the run analysis, and manages browser sessions for web applications. Every click and keystroke a job makes goes through it.
+
+Cloud desktops provisioned through Minicor come with the service already installed. For a machine you control, install it yourself.
+
+## Install
+
+Windows 10 or later. Open an elevated PowerShell window and paste:
+
+```powershell
+$installPath = "$env:TEMP\install.ps1"
+irm https://minicor.com/installs/desktop-service/ps1 -OutFile $installPath
+powershell -ExecutionPolicy Bypass -File $installPath
+```
+
+To register the machine in one shot, set your VM API key from the dashboard first:
+
+```powershell
+$env:MDS_VM_API_KEY="your-key"
+irm https://minicor.com/installs/desktop-service/ps1 -OutFile C:\temp\install.ps1
+powershell -ExecutionPolicy Bypass -File C:\temp\install.ps1
+```
+
+Prefer a guided setup? Download the installer from [minicor.com/installs/desktop-service](https://minicor.com/installs/desktop-service) and enter the VM API key when prompted.
+
+## After the install
+
+The service registers with the platform automatically. The machine appears in your workspace with a live screen view, and jobs can run against it immediately. If it does not show up, check the dashboard's desktops page for its connection state.
+
+Where you install it is up to you: a Minicor cloud VM, your own cloud project or VPC, or on premises next to the system being automated. See [Desktops](/running/desktops#where-automations-run) for the deployment options and [Deploy on your cloud](/operations/network-boundary) for keeping everything inside your boundary.

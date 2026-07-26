@@ -57,6 +57,7 @@
               "running/calling-your-job",
               "running/executions-and-replays",
               "running/desktops",
+              "running/desktop-service",
               "running/configurations",
               "running/two-factor"
             ]
@@ -70,15 +71,9 @@
               "operations/exceptions-and-telemetry",
               "operations/monitoring-and-reporting"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "For agents",
-        "icon": "robot",
-        "groups": [
+          },
           {
-            "group": "Connect an agent",
+            "group": "For agents",
             "pages": [
               "agents/mcp",
               "agents/job-build-loop",
